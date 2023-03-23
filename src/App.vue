@@ -9,6 +9,8 @@
     <van-button type="warning">警告按钮</van-button>
     <van-button type="danger">危险按钮</van-button>
     <router-view />
+    <!-- 行内样式 px 无法转换为 rem -->
+    <div class="box" style="padding: 20px;"></div>
   </div>
 </template>
 
@@ -19,4 +21,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+.box {
+  width: 200px;
+  height: 200px;
+  background-color: red;
+}
 </style>
