@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 const request = axios.create({
-  baseURL: 'http://toutiao.itheima.net' // 接口的基础路径
+  baseURL: 'api' // 接口的基础路径
 })
 
 // 请求拦截器
