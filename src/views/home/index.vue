@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <van-nav-bar class="page-nav-bar">
+    <van-nav-bar class="page-nav-bar" fixed>
       <van-button
         slot="title"
         type="info"
@@ -16,7 +16,11 @@
       通过 swipeable 属性可以开启滑动切换标签页。
      -->
     <van-tabs class="channel-tabs" v-model="active" animated swipeable>
-      <van-tab v-for="obj in channels" :key="obj.id" :title="obj.name">{{ obj.name }}的内容</van-tab>
+      <van-tab v-for="obj in channels" :key="obj.id" :title="obj.name">
+        <!-- 文章列表 -->
+        <ArticleList :channel="obj" />
+        <!-- 文章列表 -->
+      </van-tab>
       <div slot="nav-right" class="placeholder"></div>
       <div slot="nav-right" class="hamburger-btn">
         <i class="iconfont icon-gengduo"></i>
@@ -27,11 +31,14 @@
 
 <script>
 import { getUserChannels } from '@/api/user'
+import ArticleList from './components/article-list'
 export default {
   // 组件名称
   name: 'HomeIndex',
   // 局部注册的组件
-  components: {},
+  components: {
+    ArticleList
+  },
   // 组件参数 接收来自父组件的数据
   props: {},
   // 组件状态值
@@ -75,6 +82,8 @@ export default {
 
 <style scoped lang="less">
   .home-container {
+    padding-top: 174px;
+    padding-bottom: 100px;
     /deep/.van-nav-bar__title {
       max-width: 90%;
       .search-btn {
@@ -89,8 +98,13 @@ export default {
       }
     }
     /deep/.channel-tabs {
-      .van-tab__wrap {
+      .van-tabs__wrap {
+        position: fixed;
+        top: 92px;
         height: 82px;
+        left: 0;
+        right: 0;
+        z-index: 1;
       }
       .van-tab {
         min-width: 200px;
