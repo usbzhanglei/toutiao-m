@@ -22,22 +22,38 @@
         <!-- 文章列表 -->
       </van-tab>
       <div slot="nav-right" class="placeholder"></div>
-      <div slot="nav-right" class="hamburger-btn">
+      <div slot="nav-right" class="hamburger-btn" @click="isChennelEditShow = true">
         <i class="iconfont icon-gengduo"></i>
       </div>
     </van-tabs>
+
+    <!-- 频道编辑弹出层 -->
+    <van-popup
+      v-model="isChennelEditShow"
+      closeable
+      position="bottom"
+      :style="{ height: '100%' }"
+      close-icon-position="top-left"
+    >
+      <ChannelEdit :my-channels="channels" :active="active" @update-active="onUpdateActive"></ChannelEdit>
+    </van-popup>
+    <!-- 频道编辑弹出层 -->
   </div>
 </template>
 
 <script>
 import { getUserChannels } from '@/api/user'
 import ArticleList from './components/article-list'
+import ChannelEdit from './components/channel-edit'
+import { mapState } from 'vuex'
+import { getItem } from '@/utils/storage'
 export default {
   // 组件名称
   name: 'HomeIndex',
   // 局部注册的组件
   components: {
-    ArticleList
+    ArticleList,
+    ChannelEdit
   },
   // 组件参数 接收来自父组件的数据
   props: {},
@@ -45,11 +61,14 @@ export default {
   data () {
     return {
       active: 0,
-      channels: []// 频道列表
+      channels: [], // 频道列表
+      isChennelEditShow: false// 控制编辑弹出层的显示状态
     }
   },
   // 计算属性
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   // 侦听器
   watch: {},
   // 生命周期钩子   注：没用到的钩子请自行删除
@@ -68,13 +87,33 @@ export default {
   methods: {
     async loadChannels () {
       try {
-        const { data } = await getUserChannels()
-        console.log(data)
-        this.channels = data.data.channels
-        console.log(this.channels)
+        if (this.user) {
+          // 已登录，请求获取用户频道列表
+          const { data } = await getUserChannels()
+          this.channels = data.data.channels
+        } else {
+          // 未登录，判断是否有本地的频道列表数据
+          const localChannels = getItem('TOUTIAO_CHANNELS')
+          if (localChannels) {
+            //    有，拿来使用
+            this.channels = localChannels
+          } else {
+            //    没有，请求获取默认列表数据
+            const { data } = await getUserChannels()
+            // console.log(data)
+            this.channels = data.data.channels
+          }
+        }
+        // this.channels = channel
       } catch (error) {
         this.$toast('获取频道数据失败！')
       }
+    },
+    onUpdateActive (index, isChennelEditShow = true) {
+      // 更新激活频道项
+      this.active = index
+      // 关闭编辑频道弹层
+      this.isChennelEditShow = isChennelEditShow
     }
   }
 }
