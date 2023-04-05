@@ -8,7 +8,14 @@
       error-text="加载失败，请点击重试"
       @load="onLoad"
     >
-      <van-cell v-for="(item, index) in list" :key="index" :title="item.title" />
+    <!-- :to="{name: 'article', params: { articleId: article.art_id }}"   -->
+    <!-- :to="`/article/${item.art_id}`" -->
+      <van-cell
+        v-for="(item, index) in list"
+        :key="index"
+        :title="item.title"
+        :to="{name: 'article', params: { articleId: item.art_id }}"
+      />
     </van-list>
   </div>
 </template>
@@ -31,6 +38,7 @@ export default {
   data () {
     return {
       list: [],
+      article: '',
       error: false,
       loading: false,
       page: 1,
