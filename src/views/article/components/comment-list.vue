@@ -92,7 +92,7 @@ export default {
           limit: this.limit // 获取的评论数据个数，不传表示采用后端服务设定的默认每页数据量
         })
         // this.$emit()
-        console.log(data)
+        // console.log(data)
         // 2.将数据添加到列表中
         const { results } = data.data
         this.$emit('onload-success', data.data)

@@ -229,7 +229,7 @@ export default {
         this.article = data.data
         // 请求成功关闭loading
         // this.loading = false
-        console.log(data)
+        // console.log(data)
         // 初始化图片点击预览
         // 数据驱动视图不是立即的
         // this.$refs['article-content']
@@ -271,7 +271,7 @@ export default {
       this.totalCommentCount++
     },
     onReplayClick (comment) {
-      console.log(comment)
+      // console.log(comment)
       this.isReplayShow = true
       this.currentComment = comment
     }
